@@ -1,0 +1,77 @@
+BRIEF DESCRIPTION
+=================
+
+This software is an implementation of LZ77 algorithm. He's a dictionary-based algorithm and 
+keeps track of the last n bytes of data seen, and when a phrase is encountered that has 
+already been seen, it outputs a pair of values corresponding to the position of the phrase 
+in the previously-seen buffer of data, and the length of the phrase. 
+Decompression is simple and fast: whenever a <LENGTH, POSITION> pair is encountered, go to 
+that POSITION in the window and copy LENGTH bytes to the output.
+
+The structure data is a text window divided in two parts, a dictionary and a look ahead buffer.
+The first is composed of data already encoded and the second contain the data to be encoded.
+
+NOTE
+====
+
+In order to be supported in a network applications the couples are "coded" in network format
+using htons() and in decompression side ut's used ntohs() function.
+
+
+HOW TO BUILD 
+============
+
+To build these files you must have GNU make and gcc compiler.
+Open the shell terminal, go in to the directory where you find this file and type
+
+	make
+
+after this you can find an executable called lz77.
+
+USAGE
+=====
+
+Usage : ./lz77 [options]
+
+Options :
+
+  -c	Set compression mode
+  -d	Set decompression mode
+  -i FILE
+	Filename input (source).
+	In compression mode if it isn't specify the software use the standard input,
+	instead in decompression mode you must specify it.
+  -o FILE
+	File name output (destination).
+	In decompression mode if it isn't specify the software use the standard output,
+	instead in compression mode you must specify it.
+  -t DICTIONARY
+	Specify which dictionary you want to use
+	The default one is 'it'. The name must be of 2 characters.
+  -l VALUE
+	Set look-ahead length, must specify a positive value.
+	Min value is 8 and the max value is 255
+  -w VALUE
+	Set window length, must specify a positive value.
+	Min value must be equal to look ahead length the max value is 32767.
+  -v	Set verbose mode
+
+EXAMPLES
+========
+
+	Using files  ./lz77 -c -i original_file -o compress_file -w 1024 -l 16 -t it
+	Using STDIN  ./lz77 -c -o compress_file -w 1024 -l 16 -t it
+	Using STDOUT ./lz77 -i compress-file -w 1024 -l 16 -t it
+
+NOTE
+=====
+
+  If you're using the STDIN typing the text manually use Ctrl+D to do EOF.
+
+CREDITS
+=======
+
+Author Pischedda Alessandro
+E-mail alessandro.pischedda@gmail.com
+
+
